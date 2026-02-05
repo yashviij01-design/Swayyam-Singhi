@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Love You Swayyam Singhi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: background 1s ease;
+            padding: 20px;
+        }
+
+        /* Initial state */
+        .initial-screen {
+            background: linear-gradient(135deg, #ffccd5, #ffb6c1);
+            position: relative;
+        }
+
+        /* Final state */
+        .final-screen {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb, #a8d5ba);
+        }
+
+        /* Floating question marks for initial screen */
+        .question-marks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .question-mark {
+            position: absolute;
+            color: #c2185b;
+            font-size: 24px;
+            font-weight: bold;
+            opacity: 0.7;
+            animation: float 15s infinite linear;
+        }
+
+        /* Floating sunflowers for final screen */
+        .sunflowers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.6;
+            display: none;
+        }
+
+        .sunflower {
+            position: absolute;
+            font-size: 32px;
+            animation: float 20s infinite linear;
+            opacity: 0.8;
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        /* Main container */
+        .container {
+            text-align: center;
+            z-index: 10;
+            max-width: 900px;
+            width: 100%;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.5s ease;
+        }
+
+        /* Text styling */
+        .question-text {
+            color: #333;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 40px;
+            line-height: 1.3;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .love-text {
+            color: #2d5016;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 30px;
+            line-height: 1.3;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        /* Buttons container */
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        /* Button styling */
+        .btn {
+            padding: 18px 45px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 160px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-yes {
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            color: white;
+            position: relative;
+            z-index: 5;
+        }
+
+        .btn-yes:hover {
+            background: linear-gradient(to right, #388E3C, #689F38);
+            transform: scale(1.05);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-no {
+            background: linear-gradient(to right, #f44336, #EF5350);
+            color: white;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        /* Image upload section */
+        .image-upload {
+            margin: 30px auto;
+            max-width: 600px;
+            display: none;
+        }
+
+        .upload-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px dashed #4CAF50;
+            margin-bottom: 25px;
+        }
+
+        .upload-label {
+            display: block;
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .upload-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .upload-btn:hover {
+            background-color: #388E3C;
+        }
+
+        #imageInput {
+            display: none;
+        }
+
+        /* Image display section */
+        .image-display {
+            display: none;
+            margin-top: 30px;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .couple-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
+        }
+
+        /* Hearts animation for final screen */
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: none;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff4757;
+            font-size: 24px;
+            animation: heartFloat 5s infinite linear;
+            opacity: 0;
+        }
+
+        @keyframes heartFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .question-text, .love-text {
+                font-size: clamp(1.8rem, 6vw, 2.8rem);
+            }
+            
+            .btn {
+                padding: 15px 35px;
+                font-size: 1.5rem;
+                min-width: 140px;
+            }
+            
+            .buttons-container {
+                gap: 20px;
+            }
+            
+            .couple-image {
+                max-height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .question-text, .love-text {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 1.3rem;
+                min-width: 120px;
+            }
+            
+            .buttons-container {
+                gap: 15px;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body class="initial-screen">
+    <!-- Floating question marks for initial screen -->
+    <div class="question-marks" id="questionMarks"></div>
+    
+    <!-- Floating sunflowers for final screen -->
+    <div class="sunflowers" id="sunflowers"></div>
+    
+    <!-- Hearts for final screen -->
+    <div class="hearts" id="hearts"></div>
+    
+    <!-- Main container -->
+    <div class="container">
+        <!-- Initial question text -->
+        <div class="question-text" id="questionText">
+            I Love You Swayyam Singhi. Do You Love Me?
+        </div>
+        
+        <!-- Final love text -->
+        <div class="love-text" id="loveText">
+            I Know You Love Me But I Love You More
+        </div>
+        
+        <!-- Buttons container -->
+        <div class="buttons-container" id="buttonsContainer">
+            <button class="btn btn-yes" id="yesBtn">YES</button>
+            <button class="btn btn-no" id="noBtn">NO</button>
+        </div>
+        
+        <!-- Image upload section -->
+        <div class="image-upload" id="imageUpload">
+            <div class="upload-container">
+                <span class="upload-label">Upload a picture of you and Swayyam:</span>
+                <label for="imageInput" class="upload-btn">
+                    <i class="fas fa-upload"></i> Choose Image
+                </label>
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
+            <p style="color: #666; font-size: 1rem;">After uploading, your picture will appear below with the message</p>
+        </div>
+        
+        <!-- Image display section -->
+        <div class="image-display" id="imageDisplay">
+            <img id="coupleImage" class="couple-image" src="" alt="You and Swayyam">
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const body = document.body;
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const questionText = document.getElementById('questionText');
+        const loveText = document.getElementById('loveText');
+        const buttonsContainer = document.getElementById('buttonsContainer');
+        const imageUpload = document.getElementById('imageUpload');
+        const imageDisplay = document.getElementById('imageDisplay');
+        const coupleImage = document.getElementById('coupleImage');
+        const imageInput = document.getElementById('imageInput');
+        const questionMarks = document.getElementById('questionMarks');
+        const sunflowers = document.getElementById('sunflowers');
+        const hearts = document.getElementById('hearts');
+
+        // Create floating question marks
+        for (let i = 0; i < 40; i++) {
+            const qMark = document.createElement('div');
+            qMark.className = 'question-mark';
+            qMark.innerHTML = '?';
+            qMark.style.left = `${Math.random() * 100}%`;
+            qMark.style.animationDuration = `${15 + Math.random() * 20}s`;
+            qMark.style.animationDelay = `${Math.random() * 5}s`;
+            qMark.style.fontSize = `${20 + Math.random() * 30}px`;
+            questionMarks.appendChild(qMark);
+        }
+
+        // Create floating sunflowers
+        for (let i = 0; i < 25; i++) {
+            const sunflower = document.createElement('div');
+            sunflower.className = 'sunflower';
+            sunflower.innerHTML = '🌻';
+            sunflower.style.left = `${Math.random() * 100}%`;
+            sunflower.style.animationDuration = `${20 + Math.random() * 25}s`;
+            sunflower.style.animationDelay = `${Math.random() * 5}s`;
+            sunflowers.appendChild(sunflower);
+        }
+
+        // Create floating hearts
+        for (let i = 0; i < 30; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.animationDuration = `${3 + Math.random() * 7}s`;
+            heart.style.animationDelay = `${Math.random() * 5}s`;
+            hearts.appendChild(heart);
+        }
+
+        // Move the "No" button when trying to click it
+        noBtn.addEventListener('mouseover', function() {
+            moveNoButton();
+        });
+
+        noBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        noBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        function moveNoButton() {
+            const containerRect = buttonsContainer.getBoundingClientRect();
+            const buttonRect = noBtn.getBoundingClientRect();
+            
+            // Calculate random position within the container
+            const maxX = containerRect.width - buttonRect.width;
+            const maxY = containerRect.height - buttonRect.height;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            // Move the button
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            
+            // Add a little shake effect
+            noBtn.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                noBtn.style.animation = '';
+            }, 500);
+        }
+
+        // "Yes" button click handler
+        yesBtn.addEventListener('click', function() {
+            // Change background to gradient light green
+            body.classList.remove('initial-screen');
+            body.classList.add('final-screen');
+            
+            // Show the love text and hide the question text
+            questionText.style.display = 'none';
+            loveText.style.display = 'block';
+            
+            // Hide the buttons
+            buttonsContainer.style.display = 'none';
+            
+            // Show the image upload section
+            imageUpload.style.display = 'block';
+            
+            // Hide question marks and show sunflowers and hearts
+            questionMarks.style.display = 'none';
+            sunflowers.style.display = 'block';
+            hearts.style.display = 'block';
+            
+            // Add some animation to the container
+            const container = document.querySelector('.container');
+            container.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                container.style.transform = 'scale(1)';
+            }, 300);
+        });
+
+        // Image upload handler
+        imageInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    // Set the uploaded image as source
+                    coupleImage.src = event.target.result;
+                    
+                    // Show the image display section
+                    imageDisplay.style.display = 'flex';
+                    
+                    // Hide the upload section
+                    imageUpload.style.display = 'none';
+                    
+                    // Add some animation
+                    coupleImage.style.opacity = '0';
+                    setTimeout(() => {
+                        coupleImage.style.transition = 'opacity 1s';
+                        coupleImage.style.opacity = '1';
+                    }, 100);
+                };
+                
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        // Add shake animation for the "No" button
+        const styleSheet = document.createElement('style');
+        styleSheet.innerHTML = `
+            @keyframes shake {
+                0% { transform: translate(1px, 1px) rotate(0deg); }
+                10% { transform: translate(-1px, -2px) rotate(-1deg); }
+                20% { transform: translate(-3px, 0px) rotate(1deg); }
+                30% { transform: translate(3px, 2px) rotate(0deg); }
+                40% { transform: translate(1px, -1px) rotate(1deg); }
+                50% { transform: translate(-1px, 2px) rotate(-1deg); }
+                60% { transform: translate(-3px, 1px) rotate(0deg); }
+                70% { transform: translate(3px, 1px) rotate(-1deg); }
+                80% { transform: translate(-1px, -1px) rotate(1deg); }
+                90% { transform: translate(1px, 2px) rotate(0deg); }
+                100% { transform: translate(1px, -2px) rotate(-1deg); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>
